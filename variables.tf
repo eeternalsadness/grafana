@@ -1,36 +1,33 @@
-variable "grafana-basic-auth-credentials" {
-  description = "The basic auth `username:password` used for authentication for Grafana"
-  sensitive   = true
+#############################
+# REPO PATHS
+#############################
+
+variable "repo-path-grafana-organization" {
+  description = "The path in the repo where the Grafana organization is configured"
   type        = string
-  #default     = null
+  default     = "envs/minikube/organization/organization.yaml"
 }
 
-variable "grafana-url" {
-  description = "The base URL to access Grafana"
-  sensitive   = true
+variable "repo-path-organization-users" {
+  description = "The path in the repo where Grafana users are configured"
   type        = string
-  #default     = null
+  default     = "envs/minikube/organization/users"
 }
 
-variable "contact-point-secrets" {
-  description = "A map of contact point secrets"
-  sensitive   = true
-  type        = map(any)
-  default     = {}
+variable "repo-path-folders" {
+  default = "envs/minikube/folders"
 }
 
-variable "data-source-secure-json" {
-  description = "A map of secure JSON data for data sources"
-  sensitive   = true
-  type        = map(map(string))
-  default     = null
-}
+#############################
+# GRAFANA
+#############################
 
-variable "env" {
-  description = "The environment to deploy to"
-  type        = string
-  validation {
-    condition     = var.env == "dev" || var.env == "prod"
-    error_message = "Invalid env '${var.env}'! Must be 'dev' or 'prod'"
-  }
+#############################
+# VAULT
+#############################
+
+variable "vault-max-lease-ttl-seconds" {
+  description = "Duration of intermediate tokens that Terraform gets from Vault"
+  type        = number
+  default     = 600 # 10 minutes
 }
