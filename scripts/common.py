@@ -1,39 +1,40 @@
 import subprocess
 import requests
 import re
-import hcl2
+import os
+import base64
 from pathlib import Path
 
-
-TFVARS_FILE = "terraform.auto.tfvars"
-
-with open(TFVARS_FILE, "r") as file:
-    tfvars = hcl2.load(file)
-
-GRAFANA_URL = tfvars.get("grafana-url").lstrip("https://")
-BASIC_AUTH = tfvars.get("grafana-basic-auth-credentials")
+GRAFANA_URL = os.getenv("GRAFANA_URL")
+GRAFANA_BASIC_AUTH = os.getenv("GRAFANA_AUTH", "")
 # NOTE: not used atm
-API_TOKEN = ""
+GRAFANA_API_TOKEN = os.getenv("GRAFANA_AUTH", "")
 
 
 def get_grafana_data(path, auth="basic"):
     match auth:
         case "basic":
             response = requests.get(
-                f"https://{BASIC_AUTH}@{GRAFANA_URL}{path}",
+                f"{GRAFANA_URL}{path}",
                 headers={
                     "Content-Type": "application/json",
                     "Accept": "application/json",
+                    "Authorization": f"Basic {base64.b64encode(GRAFANA_BASIC_AUTH.encode('utf-8')).decode('utf-8')}",
                 },
+                verify="/Users/bach/certs/minikube.io/ca.crt",
             )
         case "token":
             headers = {
-                "Authorization": f"Bearer {API_TOKEN}",
+                "Authorization": f"Bearer {GRAFANA_API_TOKEN}",
                 "Content-Type": "application/json",
                 "Accept": "application/json",
             }
 
-            response = requests.get(f"https://{GRAFANA_URL}{path}", headers=headers)
+            response = requests.get(
+                f"{GRAFANA_URL}{path}",
+                headers=headers,
+                verify="/Users/bach/certs/minikube.io/ca.crt",
+            )
         case _:
             raise Exception(f"Unknown auth type '{auth}'!")
     return response.json()

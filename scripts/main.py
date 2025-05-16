@@ -29,15 +29,12 @@ def main():
 
     # get config env
     env = sys.argv[2]
-    if env != "dev" and env != "prod":
-        raise Exception(f"Unrecognized input: '{env}'. Input must be 'dev' or 'prod'")
-    config_path = f"config/{env}"
+    config_path = f"envs/{env}"
 
     # run terraform init first
     command = [
         "terraform",
         "init",
-        f"-backend-config=.config/.{env}.conf",
         "-reconfigure",
     ]
     subprocess.run(
@@ -45,15 +42,15 @@ def main():
         text=True,
     )
 
-    # import_organization(config_path, generate_config_files)
+    import_organization(config_path, generate_config_files)
     import_folders(config_path, generate_config_files)
     # import_rule_groups(config_path, generate_config_files)
-    # import_contact_points(config_path, generate_config_files)
-    # import_message_templates(config_path, generate_config_files)
-    # import_notification_policy(config_path, generate_config_files)
-    # import_mute_timings(config_path, generate_config_files)
-    # import_data_sources(config_path, generate_config_files)
-    # import_users(config_path, generate_config_files)
+    import_contact_points(config_path, generate_config_files)
+    import_message_templates(config_path, generate_config_files)
+    import_notification_policy(config_path, generate_config_files)
+    import_mute_timings(config_path, generate_config_files)
+    import_data_sources(config_path, generate_config_files)
+    import_users(config_path, generate_config_files)
     # import_dashboards(config_path, generate_config_files)
 
 
