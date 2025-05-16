@@ -21,15 +21,15 @@ def import_organization(config_path, generate_config_files=True):
 
     # delete id from output
     name = list(organization_dict.keys())[0]
-    id = organization_dict[name]["id"]
-    del organization_dict[name]["id"]
+    id = organization_dict["id"]
+    del organization_dict["id"]
 
     if generate_config_files:
         write_to_config_files(config_path, organization_dict)
 
     # import to terraform
     tf_state = get_tf_state()
-    tf_organization_resource = f'{terraform_base_resource}["{name}"]'
+    tf_organization_resource = f"{terraform_base_resource}"
     if tf_organization_resource not in tf_state:
         import_tf_resource(tf_organization_resource, str(id))
 
@@ -38,7 +38,7 @@ def get_organization():
     organization_dict = {}
     data = get_grafana_data("/api/org/")
     name = data["name"]
-    organization_dict[name] = {"name": name, "id": data["id"]}
+    organization_dict = {"name": name, "id": data["id"]}
 
     return organization_dict
 
