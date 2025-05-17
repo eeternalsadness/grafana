@@ -62,7 +62,7 @@ def main():
     # import_mute_timings(config_path, generate_config_files, import_to_terraform)
     import_data_sources(config_path, generate_config_files, import_to_terraform)
     import_users(config_path, generate_config_files)
-    # import_dashboards(config_path, generate_config_files, import_to_terraform)
+    import_dashboards(config_path, generate_config_files, import_to_terraform)
 
 
 if __name__ == "__main__":
