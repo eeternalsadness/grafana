@@ -1,14 +1,12 @@
 locals {
-  data-sources-resource = merge(
-    [
-      for file_path in fileset("${path.module}/${var.repo-path-data-sources}", "*.yaml") :
-      try(yamldecode(file("${path.module}/${var.repo-path-data-sources}/${file_path}")), {})
-    ]...
-  )
+  data-sources-resource = merge([
+    for file_path in fileset("${path.module}/${var.repo-path-data-sources}", "*.yaml") :
+    try(yamldecode(file("${path.module}/${var.repo-path-data-sources}/${file_path}")), {})
+  ]...)
 }
 
 resource "grafana_data_source" "data-source" {
-  for_each = local.data-sources-resource
+  for_each = { for k, v in local.data-sources-resource : k => v if !v.read_only }
 
   # required
   name = each.value.name
