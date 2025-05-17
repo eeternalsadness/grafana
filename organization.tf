@@ -30,21 +30,23 @@ data "grafana_user" "user" {
   email = each.value.email
 }
 
-data "vault_kv_secret_v2" "oidc-google" {
-  name  = "oidc/google"
-  mount = "kvv2"
+data "vault_kv_secret_v2" "oauth2" {
+  name  = local.organization.oauth2.vaultSecretPath
+  mount = local.organization.oauth2.vaultSecretMount
 }
 
 resource "grafana_sso_settings" "oauth2" {
-  provider_name = "google"
+  provider_name = local.organization.oauth2.providerName
   oauth2_settings {
-    name          = "Google"
-    client_id     = jsondecode(data.vault_kv_secret_v2.oidc-google.data_json).client_id
-    client_secret = jsondecode(data.vault_kv_secret_v2.oidc-google.data_json).client_secret
-    allow_sign_up = true
-    auto_login    = false
-    scopes        = "openid,email,profile"
+    name                       = local.organization.oauth2.name
+    client_id                  = jsondecode(data.vault_kv_secret_v2.oauth2.data_json).client_id
+    client_secret              = jsondecode(data.vault_kv_secret_v2.oauth2.data_json).client_secret
+    allow_sign_up              = local.organization.oauth2.allowSignUp
+    auto_login                 = local.organization.oauth2.autoLogin
+    scopes                     = local.organization.oauth2.scopes
+    skip_org_role_sync         = true
+    allow_assign_grafana_admin = false
     #allowed_domains     = "gmail.com"
-    role_attribute_path = "email=='69bnguyen@gmail.com' && 'Admin' || 'Viewer'"
+    #role_attribute_path = "email=='69bnguyen@gmail.com' && 'Admin' || 'Viewer'"
   }
 }
