@@ -20,6 +20,12 @@ variable "repo-path-folders" {
   default     = "envs/minikube/folders"
 }
 
+variable "repo-path-data-sources" {
+  description = "The path in the repo where Grafana data sources are configured"
+  type        = string
+  default     = "envs/minikube/data-sources"
+}
+
 #############################
 # GRAFANA
 #############################
