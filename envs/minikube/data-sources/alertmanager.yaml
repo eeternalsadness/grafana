@@ -1,0 +1,12 @@
+alertmanager:
+  name: Alertmanager
+  type: alertmanager
+  access_mode: proxy
+  basic_auth_enabled: false
+  is_default: false
+  url: http://kube-prometheus-kube-prome-alertmanager.monitoring:9093/
+  uid: alertmanager
+  read_only: true
+  json_data:
+    handleGrafanaManagedAlerts: false
+    implementation: prometheus
