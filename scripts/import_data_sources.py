@@ -13,7 +13,9 @@ terraform_base_resource = "grafana_data_source.data-source"
 org_id = get_org_id()
 
 
-def import_data_sources(config_path, generate_config_files=True):
+def import_data_sources(
+    config_path, generate_config_files=True, import_to_terraform=True
+):
     print("Importing Grafana data sources")
 
     # create config folder if not exist
@@ -31,9 +33,10 @@ def import_data_sources(config_path, generate_config_files=True):
             write_to_config_files(config_path, data_source, data_source_dict)
 
         # import to terraform
-        tf_data_source_resource = f'{terraform_base_resource}["{data_source}"]'
-        if tf_data_source_resource not in tf_state:
-            import_tf_resource(tf_data_source_resource, f"{org_id}:{uid}")
+        if import_to_terraform:
+            tf_data_source_resource = f'{terraform_base_resource}["{data_source}"]'
+            if tf_data_source_resource not in tf_state:
+                import_tf_resource(tf_data_source_resource, f"{org_id}:{uid}")
 
 
 def get_data_sources():

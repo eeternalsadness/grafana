@@ -12,7 +12,9 @@ terraform_base_resource = "module.alerts.grafana_contact_point.contact-point"
 org_id = get_org_id()
 
 
-def import_contact_points(config_path, generate_config_files=True):
+def import_contact_points(
+    config_path, generate_config_files=True, import_to_terraform=True
+):
     print("Importing Grafana contact points")
 
     contact_point_dict = get_contact_points()
@@ -20,12 +22,15 @@ def import_contact_points(config_path, generate_config_files=True):
     if generate_config_files:
         write_to_config_files(config_path, contact_point_dict)
 
-    # check if contact point is already in state file
-    tf_state = get_tf_state()
-    for contact_point in contact_point_dict:
-        tf_contact_point_resource = f'{terraform_base_resource}["{contact_point}"]'
-        if tf_contact_point_resource not in tf_state:
-            import_tf_resource(tf_contact_point_resource, f"{org_id}:{contact_point}")
+    if import_to_terraform:
+        # check if contact point is already in state file
+        tf_state = get_tf_state()
+        for contact_point in contact_point_dict:
+            tf_contact_point_resource = f'{terraform_base_resource}["{contact_point}"]'
+            if tf_contact_point_resource not in tf_state:
+                import_tf_resource(
+                    tf_contact_point_resource, f"{org_id}:{contact_point}"
+                )
 
 
 def get_contact_points():

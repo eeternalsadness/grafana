@@ -12,7 +12,9 @@ terraform_base_resource = "module.alerts.grafana_message_template.message-templa
 org_id = get_org_id()
 
 
-def import_message_templates(config_path, generate_config_files=True):
+def import_message_templates(
+    config_path, generate_config_files=True, import_to_terraform=True
+):
     print("Importing Grafana message templates")
 
     # create config folder if not exist
@@ -25,16 +27,17 @@ def import_message_templates(config_path, generate_config_files=True):
         write_to_config_files(config_path, message_template_dict)
 
     # import to terraform
-    tf_state = get_tf_state()
-    for message_template in message_template_dict:
-        tf_message_template_resource = (
-            f'{terraform_base_resource}["{message_template}"]'
-        )
-        if tf_message_template_resource not in tf_state:
-            import_tf_resource(
-                tf_message_template_resource,
-                f"{org_id}:{message_template}",
+    if import_to_terraform:
+        tf_state = get_tf_state()
+        for message_template in message_template_dict:
+            tf_message_template_resource = (
+                f'{terraform_base_resource}["{message_template}"]'
             )
+            if tf_message_template_resource not in tf_state:
+                import_tf_resource(
+                    tf_message_template_resource,
+                    f"{org_id}:{message_template}",
+                )
 
 
 def get_message_templates():

@@ -14,7 +14,7 @@ terraform_base_folder_perm_resource = "grafana_folder_permission.folder-permissi
 org_id = get_org_id()
 
 
-def import_folders(config_path, generate_config_files=True):
+def import_folders(config_path, generate_config_files=True, import_to_terraform=True):
     print("Importing Grafana folders")
 
     # create config folder if not exist
@@ -26,21 +26,22 @@ def import_folders(config_path, generate_config_files=True):
     if generate_config_files:
         write_to_config_files(config_path, folder_dict)
 
-    tf_state = get_tf_state()
-    for folder_title in folder_dict:
-        uid = folder_dict[folder_title]["uid"]
+    if import_to_terraform:
+        tf_state = get_tf_state()
+        for folder_title in folder_dict:
+            uid = folder_dict[folder_title]["uid"]
 
-        # import folders to terraform
-        tf_folder_resource = f'{terraform_base_folder_resource}["{folder_title}"]'
-        if tf_folder_resource not in tf_state:
-            import_tf_resource(tf_folder_resource, f"{org_id}:{uid}")
+            # import folders to terraform
+            tf_folder_resource = f'{terraform_base_folder_resource}["{folder_title}"]'
+            if tf_folder_resource not in tf_state:
+                import_tf_resource(tf_folder_resource, f"{org_id}:{uid}")
 
-        # import folder perms to terraform
-        tf_folder_perm_resource = (
-            f'{terraform_base_folder_perm_resource}["{folder_title}"]'
-        )
-        if tf_folder_perm_resource not in tf_state:
-            import_tf_resource(tf_folder_perm_resource, f"{org_id}:{uid}")
+            # import folder perms to terraform
+            tf_folder_perm_resource = (
+                f'{terraform_base_folder_perm_resource}["{folder_title}"]'
+            )
+            if tf_folder_perm_resource not in tf_state:
+                import_tf_resource(tf_folder_perm_resource, f"{org_id}:{uid}")
 
 
 def get_folders():

@@ -27,8 +27,19 @@ def main():
                 f"Unrecognized input: '{sys.argv[1]}'. Input must be 'y' (generate config files) or 'n' (don't generate config files)"
             )
 
+    import_to_terraform = True
+    match sys.argv[2]:
+        case "y":
+            import_to_terraform = True
+        case "n":
+            import_to_terraform = False
+        case _:
+            raise Exception(
+                f"Unrecognized input: '{sys.argv[2]}'. Input must be 'y' (import to Terraform) or 'n' (don't import to Terraform)"
+            )
+
     # get config env
-    env = sys.argv[2]
+    env = sys.argv[3]
     config_path = f"envs/{env}"
 
     # run terraform init first
@@ -42,16 +53,16 @@ def main():
         text=True,
     )
 
-    import_organization(config_path, generate_config_files)
-    # import_folders(config_path, generate_config_files)
-    # import_rule_groups(config_path, generate_config_files)
-    # import_contact_points(config_path, generate_config_files)
-    # import_message_templates(config_path, generate_config_files)
-    # import_notification_policy(config_path, generate_config_files)
-    # import_mute_timings(config_path, generate_config_files)
-    # import_data_sources(config_path, generate_config_files)
+    import_organization(config_path, generate_config_files, import_to_terraform)
+    # import_folders(config_path, generate_config_files, import_to_terraform)
+    # import_rule_groups(config_path, generate_config_files, import_to_terraform)
+    # import_contact_points(config_path, generate_config_files, import_to_terraform)
+    # import_message_templates(config_path, generate_config_files, import_to_terraform)
+    # import_notification_policy(config_path, generate_config_files, import_to_terraform)
+    # import_mute_timings(config_path, generate_config_files, import_to_terraform)
+    # import_data_sources(config_path, generate_config_files, import_to_terraform)
     import_users(config_path, generate_config_files)
-    # import_dashboards(config_path, generate_config_files)
+    # import_dashboards(config_path, generate_config_files, import_to_terraform)
 
 
 if __name__ == "__main__":

@@ -14,7 +14,9 @@ terraform_base_resource = "module.alerts.grafana_rule_group.rule-group"
 org_id = get_org_id()
 
 
-def import_rule_groups(config_path, generate_config_files=True):
+def import_rule_groups(
+    config_path, generate_config_files=True, import_to_terraform=True
+):
     print("Importing Grafana rule groups")
 
     rule_groups = get_rule_groups()
@@ -33,11 +35,14 @@ def import_rule_groups(config_path, generate_config_files=True):
             write_to_config_files(config_path, folder_name, title, data)
 
         # import to terraform
-        tf_rule_group_resource = f'{terraform_base_resource}["{folder_name}/{title}"]'
-        if tf_rule_group_resource not in tf_state:
-            import_tf_resource(
-                tf_rule_group_resource, f"{org_id}:{folder_uid}:{rule_group_name}"
+        if import_to_terraform:
+            tf_rule_group_resource = (
+                f'{terraform_base_resource}["{folder_name}/{title}"]'
             )
+            if tf_rule_group_resource not in tf_state:
+                import_tf_resource(
+                    tf_rule_group_resource, f"{org_id}:{folder_uid}:{rule_group_name}"
+                )
 
 
 def get_rule_groups():
