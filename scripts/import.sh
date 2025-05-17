@@ -15,6 +15,16 @@ case "$generate_config_files" in
   ;;
 esac
 
+read -rp "Import resources into Terraform? [y/n]: " import_resources
+case "$import_resources" in
+"y") ;;
+"n") ;;
+*)
+  echo "Unrecognized input: '${import_resources}'. Input must be 'y' (generate config files) or 'n' (don't generate config files)"
+  exit 1
+  ;;
+esac
+
 # get config env
 read -rp "Enter env to use [minikube]: " env
 case "$env" in
@@ -27,4 +37,4 @@ esac
 
 export GRAFANA_AUTH="$(vault kv get -mount=kvv2 -field=username grafana):$(vault kv get -mount=kvv2 -field=password grafana)"
 
-python3 scripts/main.py "$generate_config_files" "$env"
+python3 scripts/main.py "$generate_config_files" "$import_resources" "$env"
