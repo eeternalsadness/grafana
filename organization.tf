@@ -6,7 +6,7 @@ locals {
     ]...
   )
 
-  organization = yamldecode(file("${path.module}/${var.repo-path-grafana-organization}"))
+  organization = yamldecode(file("${path.module}/${var.repo-path-organization}"))
 }
 
 resource "grafana_organization" "organization" {

@@ -2,7 +2,7 @@
 # REPO PATHS
 #############################
 
-variable "repo-path-grafana-organization" {
+variable "repo-path-organization" {
   description = "The path in the repo where the Grafana organization is configured"
   type        = string
   default     = "envs/minikube/organization/organization.yaml"
@@ -15,7 +15,9 @@ variable "repo-path-organization-users" {
 }
 
 variable "repo-path-folders" {
-  default = "envs/minikube/folders"
+  description = "The path in the repo where Grafana folders are configured"
+  type        = string
+  default     = "envs/minikube/folders"
 }
 
 #############################
