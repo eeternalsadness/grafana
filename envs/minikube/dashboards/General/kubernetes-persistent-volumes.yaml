@@ -1,0 +1,6 @@
+kubernetes-persistent-volumes:
+  permissions:
+  - permission: Edit
+    role: Editor
+  - permission: View
+    role: Viewer

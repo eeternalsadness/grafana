@@ -1,0 +1,6 @@
+alertmanager-overview:
+  permissions:
+  - permission: Edit
+    role: Editor
+  - permission: View
+    role: Viewer

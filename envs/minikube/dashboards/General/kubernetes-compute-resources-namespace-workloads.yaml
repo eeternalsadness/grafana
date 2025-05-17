@@ -1,0 +1,6 @@
+kubernetes-compute-resources-namespace-workloads:
+  permissions:
+  - permission: View
+    role: Viewer
+  - permission: Edit
+    role: Editor
