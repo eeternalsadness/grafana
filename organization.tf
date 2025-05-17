@@ -2,7 +2,7 @@ locals {
   users = merge(
     [
       for file_path in fileset("${path.module}/${var.repo-path-organization-users}", "*.yaml") :
-      try(yamldecode(file("${path.module}/${file_path}")), {})
+      try(yamldecode(file("${path.module}/${var.repo-path-organization-users}/${file_path}")), {})
     ]...
   )
 
@@ -18,7 +18,7 @@ resource "grafana_organization" "organization" {
   create_users = false
 
   # NOTE: prevent tf plan from always adding `admin@localhost` to the list of admins
-  admins  = [for user in local.users : user.email if user.role == "Admin"]
+  admins  = [for user in local.users : user.email if user.role == "Admin" && user.email != "admin@localhost"]
   editors = [for user in local.users : user.email if user.role == "Editor"]
   viewers = [for user in local.users : user.email if user.role == "Viewer"]
   #users_without_access = []
