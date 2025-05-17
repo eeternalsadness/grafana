@@ -54,13 +54,13 @@ def main():
     )
 
     import_organization(config_path, generate_config_files, import_to_terraform)
-    # import_folders(config_path, generate_config_files, import_to_terraform)
+    import_folders(config_path, generate_config_files, import_to_terraform)
     # import_rule_groups(config_path, generate_config_files, import_to_terraform)
     # import_contact_points(config_path, generate_config_files, import_to_terraform)
     # import_message_templates(config_path, generate_config_files, import_to_terraform)
     # import_notification_policy(config_path, generate_config_files, import_to_terraform)
     # import_mute_timings(config_path, generate_config_files, import_to_terraform)
-    # import_data_sources(config_path, generate_config_files, import_to_terraform)
+    import_data_sources(config_path, generate_config_files, import_to_terraform)
     import_users(config_path, generate_config_files)
     # import_dashboards(config_path, generate_config_files, import_to_terraform)
 

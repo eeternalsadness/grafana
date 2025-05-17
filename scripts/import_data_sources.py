@@ -35,7 +35,11 @@ def import_data_sources(
         # import to terraform
         if import_to_terraform:
             tf_data_source_resource = f'{terraform_base_resource}["{data_source}"]'
-            if tf_data_source_resource not in tf_state:
+            # only import data sources that are not read-only
+            if (
+                not data_source_dict[data_source]["read_only"]
+                and tf_data_source_resource not in tf_state
+            ):
                 import_tf_resource(tf_data_source_resource, f"{org_id}:{uid}")
 
 
@@ -56,6 +60,7 @@ def get_data_sources():
             "is_default": data_source["isDefault"],
             "url": data_source["url"],
             "uid": data_source["uid"],
+            "read_only": data_source["readOnly"],
         }
 
         if "httpHeaders" in data_source and data_source["httpHeaders"]:
