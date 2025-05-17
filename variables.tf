@@ -26,6 +26,12 @@ variable "repo-path-data-sources" {
   default     = "envs/minikube/data-sources"
 }
 
+variable "repo-path-dashboards" {
+  description = "The path in the repo where Grafana dashboards are configured"
+  type        = string
+  default     = "envs/minikube/dashboards"
+}
+
 #############################
 # GRAFANA
 #############################
