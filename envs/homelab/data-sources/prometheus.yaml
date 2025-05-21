@@ -1,0 +1,12 @@
+prometheus:
+  name: Prometheus
+  type: prometheus
+  access_mode: proxy
+  basic_auth_enabled: false
+  is_default: true
+  url: http://kube-prometheus-kube-prome-prometheus.monitoring:9090/
+  uid: prometheus
+  read_only: true
+  json_data:
+    httpMethod: POST
+    timeInterval: 30s
