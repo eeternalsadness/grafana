@@ -10,6 +10,12 @@ GRAFANA_BASIC_AUTH = os.getenv("GRAFANA_AUTH", "")
 # NOTE: not used atm
 GRAFANA_API_TOKEN = os.getenv("GRAFANA_AUTH", "")
 
+# self-signed certs
+CERT_PATHS = {
+    "https://grafana.minikube.io": "/Users/bach/certs/minikube.io/ca.crt",
+    "https://grafana.homelab.io": "/Users/bach/certs/homelab.io/ca.crt",
+}
+
 
 def get_grafana_data(path, auth="basic"):
     match auth:
@@ -21,7 +27,7 @@ def get_grafana_data(path, auth="basic"):
                     "Accept": "application/json",
                     "Authorization": f"Basic {base64.b64encode(GRAFANA_BASIC_AUTH.encode('utf-8')).decode('utf-8')}",
                 },
-                verify="/Users/bach/certs/minikube.io/ca.crt",
+                verify=(CERT_PATHS[GRAFANA_URL] if GRAFANA_URL in CERT_PATHS else None),
             )
         case "token":
             headers = {
@@ -33,7 +39,7 @@ def get_grafana_data(path, auth="basic"):
             response = requests.get(
                 f"{GRAFANA_URL}{path}",
                 headers=headers,
-                verify="/Users/bach/certs/minikube.io/ca.crt",
+                verify=(CERT_PATHS[GRAFANA_URL] if GRAFANA_URL in CERT_PATHS else None),
             )
         case _:
             raise Exception(f"Unknown auth type '{auth}'!")
