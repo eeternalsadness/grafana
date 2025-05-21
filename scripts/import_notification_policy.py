@@ -15,7 +15,7 @@ org_id = get_org_id()
 
 
 def import_notification_policy(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana notification policy")
 
@@ -27,7 +27,9 @@ def import_notification_policy(
         tf_state = get_tf_state()
         tf_notification_policy_resource = f'{terraform_base_resource}["default"]'
         if tf_notification_policy_resource not in tf_state:
-            import_tf_resource(tf_notification_policy_resource, f"{org_id}:default")
+            import_tf_resource(
+                tf_notification_policy_resource, f"{org_id}:default", env
+            )
 
 
 def get_notification_policy():

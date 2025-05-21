@@ -14,7 +14,7 @@ org_id = get_org_id()
 
 
 def import_data_sources(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana data sources")
 
@@ -40,7 +40,7 @@ def import_data_sources(
                 not data_source_dict[data_source]["read_only"]
                 and tf_data_source_resource not in tf_state
             ):
-                import_tf_resource(tf_data_source_resource, f"{org_id}:{uid}")
+                import_tf_resource(tf_data_source_resource, f"{org_id}:{uid}", env)
 
 
 def get_data_sources():

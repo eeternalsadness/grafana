@@ -67,10 +67,11 @@ def get_tf_state():
 #    return resource_str in tf_state
 
 
-def import_tf_resource(resource_str, import_address):
+def import_tf_resource(resource_str, import_address, env):
     command = [
         "terraform",
         "import",
+        f"-var-file=envs/{env}/.config/terraform.tfvars",
         resource_str,
         import_address,
     ]

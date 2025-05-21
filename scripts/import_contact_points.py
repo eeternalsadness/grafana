@@ -13,7 +13,7 @@ org_id = get_org_id()
 
 
 def import_contact_points(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana contact points")
 
@@ -29,7 +29,7 @@ def import_contact_points(
             tf_contact_point_resource = f'{terraform_base_resource}["{contact_point}"]'
             if tf_contact_point_resource not in tf_state:
                 import_tf_resource(
-                    tf_contact_point_resource, f"{org_id}:{contact_point}"
+                    tf_contact_point_resource, f"{org_id}:{contact_point}", env
                 )
 
 

@@ -15,7 +15,7 @@ org_id = get_org_id()
 
 
 def import_rule_groups(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana rule groups")
 
@@ -41,7 +41,9 @@ def import_rule_groups(
             )
             if tf_rule_group_resource not in tf_state:
                 import_tf_resource(
-                    tf_rule_group_resource, f"{org_id}:{folder_uid}:{rule_group_name}"
+                    tf_rule_group_resource,
+                    f"{org_id}:{folder_uid}:{rule_group_name}",
+                    env,
                 )
 
 

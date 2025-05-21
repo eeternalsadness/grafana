@@ -18,7 +18,7 @@ org_id = get_org_id()
 
 
 def import_dashboards(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana dashboards")
 
@@ -41,14 +41,14 @@ def import_dashboards(
                 f'{terraform_base_dashboard_resource}["{dashboard}"]'
             )
             if tf_dashboard_resource not in tf_state:
-                import_tf_resource(tf_dashboard_resource, f"{org_id}:{uid}")
+                import_tf_resource(tf_dashboard_resource, f"{org_id}:{uid}", env)
 
             # import dashboard permissions to terraform
             tf_dashboard_perm_resource = (
                 f'{terraform_base_dashboard_perm_resource}["{dashboard}"]'
             )
             if tf_dashboard_perm_resource not in tf_state:
-                import_tf_resource(tf_dashboard_perm_resource, f"{org_id}:{uid}")
+                import_tf_resource(tf_dashboard_perm_resource, f"{org_id}:{uid}", env)
 
 
 def get_dashboards():

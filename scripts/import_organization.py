@@ -11,7 +11,7 @@ terraform_base_resource = "grafana_organization.organization"
 
 
 def import_organization(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana organization")
 
@@ -22,7 +22,7 @@ def import_organization(
     organization_dict = get_organization()
 
     # delete id from output
-    name = list(organization_dict.keys())[0]
+    # name = list(organization_dict.keys())[0]
     id = organization_dict["id"]
     del organization_dict["id"]
 
@@ -34,7 +34,7 @@ def import_organization(
         tf_state = get_tf_state()
         tf_organization_resource = f"{terraform_base_resource}"
         if tf_organization_resource not in tf_state:
-            import_tf_resource(tf_organization_resource, str(id))
+            import_tf_resource(tf_organization_resource, str(id), env)
 
 
 def get_organization():

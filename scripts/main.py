@@ -46,6 +46,7 @@ def main():
     command = [
         "terraform",
         "init",
+        f"-backend-config={config_path}/.config/backend-config.conf",
         "-reconfigure",
     ]
     subprocess.run(
@@ -53,16 +54,16 @@ def main():
         text=True,
     )
 
-    import_organization(config_path, generate_config_files, import_to_terraform)
-    import_folders(config_path, generate_config_files, import_to_terraform)
-    # import_rule_groups(config_path, generate_config_files, import_to_terraform)
-    # import_contact_points(config_path, generate_config_files, import_to_terraform)
-    # import_message_templates(config_path, generate_config_files, import_to_terraform)
-    # import_notification_policy(config_path, generate_config_files, import_to_terraform)
-    # import_mute_timings(config_path, generate_config_files, import_to_terraform)
-    import_data_sources(config_path, generate_config_files, import_to_terraform)
+    import_organization(config_path, env, generate_config_files, import_to_terraform)
+    import_folders(config_path, env, generate_config_files, import_to_terraform)
+    # import_rule_groups(config_path, env, generate_config_files, import_to_terraform)
+    # import_contact_points(config_path, env, generate_config_files, import_to_terraform)
+    # import_message_templates(config_path, env, generate_config_files, import_to_terraform)
+    # import_notification_policy(config_path, env, generate_config_files, import_to_terraform)
+    # import_mute_timings(config_path, env, generate_config_files, import_to_terraform)
+    import_data_sources(config_path, env, generate_config_files, import_to_terraform)
     import_users(config_path, generate_config_files)
-    import_dashboards(config_path, generate_config_files, import_to_terraform)
+    import_dashboards(config_path, env, generate_config_files, import_to_terraform)
 
 
 if __name__ == "__main__":

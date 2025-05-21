@@ -13,7 +13,7 @@ org_id = get_org_id()
 
 
 def import_message_templates(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana message templates")
 
@@ -37,6 +37,7 @@ def import_message_templates(
                 import_tf_resource(
                     tf_message_template_resource,
                     f"{org_id}:{message_template}",
+                    env,
                 )
 
 

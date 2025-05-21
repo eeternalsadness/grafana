@@ -13,7 +13,7 @@ org_id = get_org_id()
 
 
 def import_mute_timings(
-    config_path, generate_config_files=True, import_to_terraform=True
+    config_path, env, generate_config_files=True, import_to_terraform=True
 ):
     print("Importing Grafana mute timings")
 
@@ -34,7 +34,7 @@ def import_mute_timings(
             tf_state = get_tf_state()
             tf_mute_timings_resource = f'{terraform_base_resource}["{name}"]'
             if tf_mute_timings_resource not in tf_state:
-                import_tf_resource(tf_mute_timings_resource, f"{org_id}:{name}")
+                import_tf_resource(tf_mute_timings_resource, f"{org_id}:{name}", env)
 
 
 def get_mute_timings():
