@@ -2,7 +2,6 @@ name: minikube
 oauth2:
   name: Google
   providerName: google
-  vaultSecretMount: kvv2
   vaultSecretPath: oidc/google
   allowSignUp: true
   autoLogin: false

@@ -45,3 +45,9 @@ variable "vault-max-lease-ttl-seconds" {
   type        = number
   default     = 600 # 10 minutes
 }
+
+variable "vault-path-secret-kv-v2" {
+  description = "The path in vault where kvv2 secrets are stored"
+  type        = string
+  default     = "kvv2"
+}

@@ -32,7 +32,7 @@ data "grafana_user" "user" {
 
 data "vault_kv_secret_v2" "oauth2" {
   name  = local.organization.oauth2.vaultSecretPath
-  mount = local.organization.oauth2.vaultSecretMount
+  mount = var.vault-path-secret-kv-v2
 }
 
 resource "grafana_sso_settings" "oauth2" {
