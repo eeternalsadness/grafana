@@ -1,4 +1,4 @@
-name: Main Org.
+name: minikube
 oauth2:
   name: Google
   providerName: google
