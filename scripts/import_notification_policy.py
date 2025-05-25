@@ -44,32 +44,33 @@ def get_notification_policy():
         "policies": [],
     }
 
-    for route in data["routes"]:
-        policy_dict = {
-            "contact_point": route["receiver"],
-            "object_matchers": [],
-        }
+    if "routes" in data:
+        for route in data["routes"]:
+            policy_dict = {
+                "contact_point": route["receiver"],
+                "object_matchers": [],
+            }
 
-        if "continue" in route:
-            policy_dict["continue"] = route["continue"]
-        if "group_by" in route:
-            policy_dict["group_by"] = route["group_by"]
-        if "group_wait" in route:
-            policy_dict["group_wait"] = route["group_wait"]
-        if "group_interval" in route:
-            policy_dict["group_interval"] = route["group_interval"]
-        if "repeat_interval" in route:
-            policy_dict["repeat_interval"] = route["repeat_interval"]
+            if "continue" in route:
+                policy_dict["continue"] = route["continue"]
+            if "group_by" in route:
+                policy_dict["group_by"] = route["group_by"]
+            if "group_wait" in route:
+                policy_dict["group_wait"] = route["group_wait"]
+            if "group_interval" in route:
+                policy_dict["group_interval"] = route["group_interval"]
+            if "repeat_interval" in route:
+                policy_dict["repeat_interval"] = route["repeat_interval"]
 
-        for object_matcher in route["object_matchers"]:
-            policy_dict["object_matchers"].append(
-                {
-                    "label": object_matcher[0],
-                    "match": object_matcher[1],
-                    "value": object_matcher[2],
-                }
-            )
-        notification_policy_dict["default"]["policies"].append(policy_dict)
+            for object_matcher in route["object_matchers"]:
+                policy_dict["object_matchers"].append(
+                    {
+                        "label": object_matcher[0],
+                        "match": object_matcher[1],
+                        "value": object_matcher[2],
+                    }
+                )
+            notification_policy_dict["default"]["policies"].append(policy_dict)
 
     return notification_policy_dict
 

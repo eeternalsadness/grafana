@@ -59,9 +59,9 @@ def get_contact_points():
                     ] = contact_point_receiver["settings"]["message"]
 
                     # sensitive data
-                    contact_points[name]["contact_points"][contact_point_type][
-                        "sensitive"
-                    ] = {"url": contact_point_receiver["settings"]["url"]}
+                    # contact_points[name]["contact_points"][contact_point_type][
+                    #    "sensitive"
+                    # ] = {"url": contact_point_receiver["settings"]["url"]}
                 case "slack":
                     # non-sensitive data
                     contact_points[name]["contact_points"][contact_point_type][
@@ -72,9 +72,9 @@ def get_contact_points():
                     ] = contact_point_receiver["settings"]["text"]
 
                     # sensitive data
-                    contact_points[name]["contact_points"][contact_point_type][
-                        "sensitive"
-                    ] = {"url": contact_point_receiver["settings"]["url"]}
+                    # contact_points[name]["contact_points"][contact_point_type][
+                    #    "sensitive"
+                    # ] = {"url": contact_point_receiver["settings"]["url"]}
                 case "telegram":
                     # non-sensitive data
                     contact_points[name]["contact_points"][contact_point_type][
@@ -85,9 +85,11 @@ def get_contact_points():
                     ] = contact_point_receiver["settings"]["chatid"]
 
                     # sensitive data
-                    contact_points[name]["contact_points"][contact_point_type][
-                        "sensitive"
-                    ] = {"token": contact_point_receiver["settings"]["bottoken"]}
+                    # contact_points[name]["contact_points"][contact_point_type][
+                    #    "sensitive"
+                    # ] = {"token": contact_point_receiver["settings"]["bottoken"]}
+                case "email":
+                    print(contact_point_receiver["settings"])
                 case _:
                     raise Exception(
                         f"Contact point type '{contact_point_type}' not recognized! Please modify the script to handle this contact point type."
@@ -101,30 +103,30 @@ def write_to_config_files(config_path, contact_point_dict):
     create_dir(f"{config_path}/{base_path}")
 
     # write sensitive data to .auto.tfvars files
-    tfvars_file = "contact-point-secrets.auto.tfvars"
-    print(f"Writing to '{tfvars_file}'")
-    with open(tfvars_file, "w") as file:
-        file.write("contact-point-secrets = {\n")
-        for contact_point in contact_point_dict:
-            file.write(f"  {contact_point} = {{\n")
-            for contact_point_type in contact_point_dict[contact_point][
-                "contact_points"
-            ]:
-                file.write(f"    {contact_point_type} = {{\n")
-                for sensitive_data in contact_point_dict[contact_point][
-                    "contact_points"
-                ][contact_point_type]["sensitive"]:
-                    file.write(
-                        f'      {sensitive_data} = "{contact_point_dict[contact_point]["contact_points"][contact_point_type]["sensitive"][sensitive_data]}"\n'
-                    )
-                file.write("    }\n")
+    # tfvars_file = "contact-point-secrets.auto.tfvars"
+    # print(f"Writing to '{tfvars_file}'")
+    # with open(tfvars_file, "w") as file:
+    #    file.write("contact-point-secrets = {\n")
+    #    for contact_point in contact_point_dict:
+    #        file.write(f"  {contact_point} = {{\n")
+    #        for contact_point_type in contact_point_dict[contact_point][
+    #            "contact_points"
+    #        ]:
+    #            file.write(f"    {contact_point_type} = {{\n")
+    #            for sensitive_data in contact_point_dict[contact_point][
+    #                "contact_points"
+    #            ][contact_point_type]["sensitive"]:
+    #                file.write(
+    #                    f'      {sensitive_data} = "{contact_point_dict[contact_point]["contact_points"][contact_point_type]["sensitive"][sensitive_data]}"\n'
+    #                )
+    #            file.write("    }\n")
 
-                # remove sensitive data from dict to dump later
-                del contact_point_dict[contact_point]["contact_points"][
-                    contact_point_type
-                ]["sensitive"]
-            file.write("  }\n")
-        file.write("}")
+    #            # remove sensitive data from dict to dump later
+    #            del contact_point_dict[contact_point]["contact_points"][
+    #                contact_point_type
+    #            ]["sensitive"]
+    #        file.write("  }\n")
+    #    file.write("}")
 
     # write non-sensitive data to yaml files
     file_path = f"{config_path}/{base_path}/contact-points.yaml"
