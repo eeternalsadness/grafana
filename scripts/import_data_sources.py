@@ -61,6 +61,7 @@ def get_data_sources():
             "url": data_source["url"],
             "uid": data_source["uid"],
             "read_only": data_source["readOnly"],
+            "has_secrets": False,
         }
 
         if "httpHeaders" in data_source and data_source["httpHeaders"]:
@@ -71,6 +72,8 @@ def get_data_sources():
             data_source_dict[name]["database_name"] = data_source["database"]
         if "jsonData" in data_source and data_source["jsonData"]:
             data_source_dict[name]["json_data"] = data_source["jsonData"]
+        if "secureJsonFields" in data_source and data_source["secureJsonFields"]:
+            data_source_dict[name]["has_secrets"] = True
         if "user" in data_source and data_source["user"]:
             data_source_dict[name]["username"] = data_source["user"]
 

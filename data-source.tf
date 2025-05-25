@@ -5,6 +5,13 @@ locals {
   ]...)
 }
 
+data "vault_kv_secret_v2" "data-source" {
+  for_each = toset([for k, v in local.data-sources-resource : k if !v.read_only && v.has_secrets])
+
+  name  = "${var.vault-path-kv-grafana}/data_sources/${each.value}"
+  mount = var.vault-mount-kv
+}
+
 resource "grafana_data_source" "data-source" {
   for_each = { for k, v in local.data-sources-resource : k => v if !v.read_only }
 
