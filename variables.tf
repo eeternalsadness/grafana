@@ -52,8 +52,8 @@ variable "vault-mount-kv" {
   default     = "kvv2"
 }
 
-variable "vault-path-kv-grafana" {
-  description = "The path in Vault where Grafana's kvv2 secrets are stored"
+variable "vault-path-kv-data-sources" {
+  description = "The path in Vault where data sources' kvv2 secrets are stored"
   type        = string
-  default     = "grafana"
+  default     = "grafana/data_sources"
 }
