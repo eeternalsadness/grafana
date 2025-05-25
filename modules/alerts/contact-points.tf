@@ -8,21 +8,21 @@ locals {
 }
 
 data "vault_kv_secret_v2" "contact-point-googlechat" {
-  for_each = toset([for k, v in local.contact-points : k if contains(keys(v), "googlechat")])
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v.contact_points), "googlechat")])
 
   name  = "${var.vault-path-kv-contact-point-googlechat}/${each.value}"
   mount = var.vault-mount-kv
 }
 
 data "vault_kv_secret_v2" "contact-point-slack" {
-  for_each = toset([for k, v in local.contact-points : k if contains(keys(v), "slack")])
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v.contact_points), "slack")])
 
   name  = "${var.vault-path-kv-contact-point-slack}/${each.value}"
   mount = var.vault-mount-kv
 }
 
 data "vault_kv_secret_v2" "contact-point-telegram" {
-  for_each = toset([for k, v in local.contact-points : k if contains(keys(v), "telegram")])
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v.contact_points), "telegram")])
 
   name  = "${var.vault-path-kv-contact-point-telegram}/${each.value}"
   mount = var.vault-mount-kv

@@ -67,4 +67,3 @@ resource "grafana_rule_group" "rule-group" {
     }
   }
 }
-
