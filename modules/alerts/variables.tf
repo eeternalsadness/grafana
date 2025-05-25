@@ -4,13 +4,6 @@ variable "contact-points-config-dir" {
   type        = string
 }
 
-variable "contact-point-secrets" {
-  description = "A map of contact point secrets"
-  sensitive   = true
-  type        = map(any)
-  default     = {}
-}
-
 # message templates
 variable "message-templates-config-dir" {
   description = "The relative path of the directory that stores the yaml files for message template configuration"
@@ -43,4 +36,24 @@ variable "mute-timings-config-dir" {
 variable "org-id" {
   description = "The organization ID for alert resources"
   type        = number
+}
+
+variable "vault-mount-kv" {
+  description = "The path in Vault where the kvv2 secrets backend is mounted"
+  type        = string
+}
+
+variable "vault-path-kv-contact-point-googlechat" {
+  description = "The path in Vault where Google chat contact points' kvv2 secrets are stored"
+  type        = string
+}
+
+variable "vault-path-kv-contact-point-slack" {
+  description = "The path in Vault where Slack contact points' kvv2 secrets are stored"
+  type        = string
+}
+
+variable "vault-path-kv-contact-point-telegram" {
+  description = "The path in Vault where Telegram contact points' kvv2 secrets are stored"
+  type        = string
 }

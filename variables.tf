@@ -32,6 +32,12 @@ variable "repo-path-dashboards" {
   default     = "envs/minikube/dashboards"
 }
 
+variable "repo-path-alerts" {
+  description = "The path in the repo where Grafana alerting resources are configured"
+  type        = string
+  default     = "envs/minikube/alerts"
+}
+
 #############################
 # GRAFANA
 #############################
@@ -56,4 +62,22 @@ variable "vault-path-kv-data-sources" {
   description = "The path in Vault where data sources' kvv2 secrets are stored"
   type        = string
   default     = "grafana/data_sources"
+}
+
+variable "vault-path-kv-contact-point-googlechat" {
+  description = "The path in Vault where Google chat contact points' kvv2 secrets are stored"
+  type        = string
+  default     = "grafana/contact_points/googlechat"
+}
+
+variable "vault-path-kv-contact-point-slack" {
+  description = "The path in Vault where Slack contact points' kvv2 secrets are stored"
+  type        = string
+  default     = "grafana/contact_points/slack"
+}
+
+variable "vault-path-kv-contact-point-telegram" {
+  description = "The path in Vault where Telegram contact points' kvv2 secrets are stored"
+  type        = string
+  default     = "grafana/contact_points/telegram"
 }

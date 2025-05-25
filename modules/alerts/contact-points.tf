@@ -7,6 +7,27 @@ locals {
   )
 }
 
+data "vault_kv_secret_v2" "contact-point-googlechat" {
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v), "googlechat")])
+
+  name  = "${var.vault-path-kv-contact-point-googlechat}/${each.value}"
+  mount = var.vault-mount-kv
+}
+
+data "vault_kv_secret_v2" "contact-point-slack" {
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v), "slack")])
+
+  name  = "${var.vault-path-kv-contact-point-slack}/${each.value}"
+  mount = var.vault-mount-kv
+}
+
+data "vault_kv_secret_v2" "contact-point-telegram" {
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v), "telegram")])
+
+  name  = "${var.vault-path-kv-contact-point-telegram}/${each.value}"
+  mount = var.vault-mount-kv
+}
+
 resource "grafana_contact_point" "contact-point" {
   for_each = local.contact-points
 
@@ -22,7 +43,7 @@ resource "grafana_contact_point" "contact-point" {
 
     content {
       # required
-      url     = var.contact-point-secrets[each.key]["googlechat"]["url"]
+      url     = jsondecode(data.vault_kv_secret_v2.contact-point-googlechat[each.key].data_json).url
       title   = each.value.contact_points["googlechat"].title
       message = each.value.contact_points["googlechat"].message
 
@@ -38,7 +59,7 @@ resource "grafana_contact_point" "contact-point" {
 
     content {
       # required
-      url   = var.contact-point-secrets[each.key]["slack"]["url"]
+      url   = jsondecode(data.vault_kv_secret_v2.contact-point-slack[each.key].data_json).url
       title = each.value.contact_points["slack"].title
       text  = each.value.contact_points["slack"].message
 
@@ -64,7 +85,7 @@ resource "grafana_contact_point" "contact-point" {
     content {
       # required
       chat_id = each.value.contact_points["telegram"].chat_id
-      token   = var.contact-point-secrets[each.key]["telegram"]["token"]
+      token   = jsondecode(data.vault_kv_secret_v2.contact-point-telegram[each.key].data_json).token
 
       # optional
       disable_notifications    = try(each.value.contact_points["telegram"].disable_notifications, null)
@@ -78,4 +99,3 @@ resource "grafana_contact_point" "contact-point" {
     }
   }
 }
-
