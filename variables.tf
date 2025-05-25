@@ -46,8 +46,14 @@ variable "vault-max-lease-ttl-seconds" {
   default     = 600 # 10 minutes
 }
 
-variable "vault-path-secret-kv-v2" {
-  description = "The path in vault where kvv2 secrets are stored"
+variable "vault-mount-kv" {
+  description = "The path in Vault where the kvv2 secrets backend is mounted"
   type        = string
   default     = "kvv2"
+}
+
+variable "vault-path-kv-grafana" {
+  description = "The path in Vault where Grafana's kvv2 secrets are stored"
+  type        = string
+  default     = "grafana"
 }
