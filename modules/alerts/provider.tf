@@ -3,5 +3,9 @@ terraform {
     grafana = {
       source = "grafana/grafana"
     }
+
+    vault = {
+      source = "hashicorp/vault"
+    }
   }
 }
