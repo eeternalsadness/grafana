@@ -1,9 +1,9 @@
 default:
-  contact_point: grafana-default-email
+  contact_point: homelab
   group_by:
-  - grafana_folder
-  - alertname
-  group_wait: ''
-  group_interval: ''
-  repeat_interval: ''
+    - grafana_folder
+    - alertname
+  group_wait: "5m"
+  group_interval: "30s"
+  repeat_interval: "4h"
   policies: []

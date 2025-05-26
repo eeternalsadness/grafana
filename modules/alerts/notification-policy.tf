@@ -47,4 +47,3 @@ resource "grafana_notification_policy" "notification-policy" {
     }
   }
 }
-

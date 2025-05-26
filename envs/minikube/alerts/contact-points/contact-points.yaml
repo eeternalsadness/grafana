@@ -1,10 +1,6 @@
-email receiver:
-  name: email receiver
-  contact_points:
-    email: {}
 homelab:
   name: homelab
   contact_points:
     telegram:
       message: Hello world
-      chat_id: '-4644389555'
+      chat_id: "-4644389555"
