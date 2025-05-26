@@ -9,4 +9,5 @@ discord-homelab:
   name: discord-homelab
   contact_points:
     discord:
+      avatar_url: "https://cdn.frankerfacez.com/emoticon/214681/4"
       message: Hello world

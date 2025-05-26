@@ -115,7 +115,7 @@ resource "grafana_contact_point" "contact-point" {
       url = jsondecode(data.vault_kv_secret_v2.contact-point-discord[each.key].data_json).url
 
       # optional
-      avatar_url              = try(each.value.contact_points["discord"].aavatar_url, null)
+      avatar_url              = try(each.value.contact_points["discord"].avatar_url, null)
       disable_resolve_message = try(each.value.contact_points["discord"].disable_resolve_message, null)
       message                 = try(each.value.contact_points["discord"].message, null)
       settings                = try(each.value.contact_points["discord"].settings, null)
