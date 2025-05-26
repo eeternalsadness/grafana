@@ -11,7 +11,7 @@ resource "grafana_notification_policy" "notification-policy" {
   for_each = local.notification-policy
 
   # required
-  contact_point = grafana_contact_point.contact-point[each.value.contact_point].name
+  contact_point = each.value.contact_point
   group_by      = each.value.group_by
 
   # optional
@@ -26,7 +26,7 @@ resource "grafana_notification_policy" "notification-policy" {
 
     content {
       # optional
-      contact_point   = grafana_contact_point.contact-point[policy.value.contact_point].name
+      contact_point   = policy.value.contact_point
       continue        = try(policy.value.continue, false)
       group_by        = try(policy.value.group_by, null)
       group_interval  = try(policy.value.group_interval, null)
