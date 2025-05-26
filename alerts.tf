@@ -7,6 +7,7 @@ module "alerts" {
   vault-path-kv-contact-point-googlechat = var.vault-path-kv-contact-point-googlechat
   vault-path-kv-contact-point-slack      = var.vault-path-kv-contact-point-slack
   vault-path-kv-contact-point-telegram   = var.vault-path-kv-contact-point-telegram
+  vault-path-kv-contact-point-discord    = var.vault-path-kv-contact-point-discord
 
   # NOTE: map folder names to uids
   folder-uids                    = { for k, v in grafana_folder.folder : v.title => v.uid }

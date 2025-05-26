@@ -57,3 +57,8 @@ variable "vault-path-kv-contact-point-telegram" {
   description = "The path in Vault where Telegram contact points' kvv2 secrets are stored"
   type        = string
 }
+
+variable "vault-path-kv-contact-point-discord" {
+  description = "The path in Vault where Discord contact points' kvv2 secrets are stored"
+  type        = string
+}

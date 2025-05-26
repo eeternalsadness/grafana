@@ -28,6 +28,13 @@ data "vault_kv_secret_v2" "contact-point-telegram" {
   mount = var.vault-mount-kv
 }
 
+data "vault_kv_secret_v2" "contact-point-discord" {
+  for_each = toset([for k, v in local.contact-points : k if contains(keys(v.contact_points), "discord")])
+
+  name  = "${var.vault-path-kv-contact-point-discord}/${each.value}"
+  mount = var.vault-mount-kv
+}
+
 resource "grafana_contact_point" "contact-point" {
   for_each = local.contact-points
 
@@ -98,4 +105,24 @@ resource "grafana_contact_point" "contact-point" {
       settings                 = try(each.value.contact_points["telegram"].settings, null)
     }
   }
+
+  # optional
+  dynamic "discord" {
+    for_each = contains(keys(each.value.contact_points), "discord") ? ["discord"] : []
+
+    content {
+      # required
+      url = jsondecode(data.vault_kv_secret_v2.contact-point-discord[each.key].data_json).url
+
+      # optional
+      avatar_url              = try(each.value.contact_points["discord"].aavatar_url, null)
+      disable_resolve_message = try(each.value.contact_points["discord"].disable_resolve_message, null)
+      message                 = try(each.value.contact_points["discord"].message, null)
+      settings                = try(each.value.contact_points["discord"].settings, null)
+      title                   = try(each.value.contact_points["discord"].title, null)
+      use_discord_username    = try(each.value.contact_points["discord"].use_discord_username, null)
+    }
+  }
+
+  depends_on = [grafana_notification_policy.notification-policy]
 }

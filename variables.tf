@@ -81,3 +81,9 @@ variable "vault-path-kv-contact-point-telegram" {
   type        = string
   default     = "grafana/contact_points/telegram"
 }
+
+variable "vault-path-kv-contact-point-discord" {
+  description = "The path in Vault where Discord contact points' kvv2 secrets are stored"
+  type        = string
+  default     = "grafana/contact_points/discord"
+}

@@ -1,6 +1,12 @@
-homelab:
-  name: homelab
+telegram-homelab:
+  name: telegram-homelab
   contact_points:
     telegram:
       message: Hello world
       chat_id: "-4644389555"
+
+discord-homelab:
+  name: discord-homelab
+  contact_points:
+    discord:
+      message: Hello world
