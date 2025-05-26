@@ -1,0 +1,6 @@
+homelab:
+  name: homelab
+  contact_points:
+    telegram:
+      message: Hello world
+      chat_id: "-4644389555"

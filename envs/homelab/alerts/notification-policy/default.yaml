@@ -1,0 +1,9 @@
+default:
+  contact_point: homelab
+  group_by:
+    - grafana_folder
+    - alertname
+  group_wait: "5m"
+  group_interval: "30s"
+  repeat_interval: "4h"
+  policies: []

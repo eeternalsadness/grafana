@@ -7,6 +7,7 @@ prometheus:
   url: http://kube-prometheus-kube-prome-prometheus.monitoring:9090/
   uid: prometheus
   read_only: true
+  has_secrets: false
   json_data:
     httpMethod: POST
     timeInterval: 30s
