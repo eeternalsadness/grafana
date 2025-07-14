@@ -1,9 +1,12 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
-echo "WARNING: make sure to export the following envs: GRAFANA_URL, GRAFANA_AUTH, VAULT_ADDR, VAULT_TOKEN"
-echo "WARNING: make sure to comment out unnecessary imports in 'scripts/main.py' before running this script!"
+source "$(dirname $0)/common.sh"
+
+terraform_role="terraform-grafana"
+
+vault_login "$terraform_role"
 
 read -rp "Generate config files? [y/n]: " generate_config_files
 case "$generate_config_files" in
@@ -21,17 +24,6 @@ case "$import_resources" in
 "n") ;;
 *)
   echo "Unrecognized input: '${import_resources}'. Input must be 'y' (generate config files) or 'n' (don't generate config files)"
-  exit 1
-  ;;
-esac
-
-# get config env
-read -rp "Enter env to use [minikube, homelab]: " env
-case "$env" in
-"minikube") ;;
-"homelab") ;;
-*)
-  echo "Unrecognized input: '${env}'. Input must be 'minikube'."
   exit 1
   ;;
 esac
