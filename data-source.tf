@@ -8,7 +8,7 @@ locals {
 data "vault_kv_secret_v2" "data-source" {
   for_each = toset([for k, v in local.data-sources-resource : k if !v.read_only && v.has_secrets])
 
-  name  = "${var.vault-path-kv-data-sources}/data_sources/${each.value}"
+  name  = "${var.vault-path-kv-data-sources}/${each.value}"
   mount = var.vault-mount-kv
 }
 
