@@ -27,7 +27,8 @@ def get_grafana_data(path, auth="basic"):
                     "Accept": "application/json",
                     "Authorization": f"Basic {base64.b64encode(GRAFANA_BASIC_AUTH.encode('utf-8')).decode('utf-8')}",
                 },
-                verify=(CERT_PATHS[GRAFANA_URL] if GRAFANA_URL in CERT_PATHS else None),
+                verify=(CERT_PATHS[GRAFANA_URL]
+                        if GRAFANA_URL in CERT_PATHS else None),
             )
         case "token":
             headers = {
@@ -39,7 +40,8 @@ def get_grafana_data(path, auth="basic"):
             response = requests.get(
                 f"{GRAFANA_URL}{path}",
                 headers=headers,
-                verify=(CERT_PATHS[GRAFANA_URL] if GRAFANA_URL in CERT_PATHS else None),
+                verify=(CERT_PATHS[GRAFANA_URL]
+                        if GRAFANA_URL in CERT_PATHS else None),
             )
         case _:
             raise Exception(f"Unknown auth type '{auth}'!")
@@ -53,6 +55,54 @@ def get_folder_name_from_uid(uid):
 
 def get_org_id():
     data = get_grafana_data("/api/org/")
+    return data["id"]
+
+
+def set_current_org(env, auth="basic"):
+    org_file_path = f"envs/{env}/organization/organization.yaml"
+    org_data = {}
+    with open(org_file_path, "r") as file:
+        org_data = yaml.safe_load(file)
+
+    org_name = org_data["name"]
+    # print(org_data)
+    # print(org_name)
+
+    data = get_grafana_data(f"/api/orgs/name/{org_name}")
+    # print(data)
+
+    match auth:
+        case "basic":
+            response = requests.put(
+                f"{GRAFANA_URL}/api/org",
+                headers={
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": f"Basic {base64.b64encode(GRAFANA_BASIC_AUTH.encode('utf-8')).decode('utf-8')}",
+                },
+                verify=(CERT_PATHS[GRAFANA_URL]
+                        if GRAFANA_URL in CERT_PATHS else None),
+                data={"name": org_name},
+            )
+        case "token":
+            headers = {
+                "Authorization": f"Bearer {API_TOKEN}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+
+            response = requests.put(
+                f"https://{GRAFANA_URL}/api/org",
+                headers=headers,
+                data={"name": org_name},
+                verify=(CERT_PATHS[GRAFANA_URL]
+                        if GRAFANA_URL in CERT_PATHS else None),
+            )
+        case _:
+            raise Exception(f"Unknown auth type '{auth}'!")
+
+    # print(response.json())
+
     return data["id"]
 
 
