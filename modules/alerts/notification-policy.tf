@@ -16,7 +16,7 @@ resource "grafana_notification_policy" "notification-policy" {
 
   # optional
   org_id             = var.org-id
-  disable_provenance = false
+  disable_provenance = true
   group_interval     = try(each.value.group_interval, null)
   group_wait         = try(each.value.group_wait, null)
   repeat_interval    = try(each.value.repeat_interval, null)

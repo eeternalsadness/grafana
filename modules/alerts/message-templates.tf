@@ -16,6 +16,6 @@ resource "grafana_message_template" "message-template" {
 
   # optional
   org_id             = var.org-id
-  disable_provenance = false
+  disable_provenance = true
 }
 

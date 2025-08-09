@@ -41,7 +41,7 @@ resource "grafana_contact_point" "contact-point" {
   # requried
   name = each.value.name
 
-  disable_provenance = false
+  disable_provenance = true
   org_id             = var.org-id
 
   # optional

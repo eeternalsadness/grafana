@@ -15,7 +15,7 @@ resource "grafana_mute_timing" "mute-timing" {
 
   # optional
   org_id             = var.org-id
-  disable_provenance = false
+  disable_provenance = true
 
   dynamic "intervals" {
     for_each = try(each.value.intervals, null) == null ? [] : each.value.intervals

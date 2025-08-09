@@ -27,7 +27,7 @@ resource "grafana_rule_group" "rule-group" {
 
   # optional
   org_id             = var.org-id
-  disable_provenance = false
+  disable_provenance = true
 
   # required
   dynamic "rule" {
