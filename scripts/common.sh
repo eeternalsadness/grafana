@@ -55,6 +55,7 @@ function is_vault_token_role_valid() {
     file_token=$(<"$VAULT_TOKEN_FILE")
     token_role=$(VAULT_TOKEN="$file_token" vault token lookup -format=json | jq -r '.data.meta.role')
     if [[ "$required_role" == "$token_role" ]]; then
+      export VAULT_TOKEN="$file_token"
       return 0
     fi
   fi
@@ -108,16 +109,20 @@ env="$1"
 
 if [[ -z "$env" ]]; then
   read -rp "Enter env to use [minikube/homelab]: " env
+else
+  shift # remove env from positional args
 fi
 
 case "$env" in
 "minikube")
   export VAULT_ADDR="https://vault.minikube.io"
   export GRAFANA_URL="https://grafana.minikube.io"
+  #export CONSUL_HTTP_ADDR=""
   ;;
 "homelab")
   export VAULT_ADDR="https://vault.homelab.io"
   export GRAFANA_URL="https://grafana.homelab.io"
+  #export CONSUL_HTTP_ADDR=""
   ;;
 *)
   echo "Unrecognized input: '${env}'. Input must be 'minikube' or 'homelab'!"
@@ -125,6 +130,6 @@ case "$env" in
   ;;
 esac
 
-export CONSUL_LEASE_FILE="$(dirname $0)/../envs/${env}/.config/vault_consul_lease_id"
-export CONSUL_TOKEN_FILE="$(dirname $0)/../envs/${env}/.config/consul_token"
+#export CONSUL_LEASE_FILE="$(dirname $0)/../envs/${env}/.config/vault_consul_lease_id"
+#export CONSUL_TOKEN_FILE="$(dirname $0)/../envs/${env}/.config/consul_token"
 export VAULT_TOKEN_FILE="$(dirname $0)/../envs/${env}/.config/vault_token"
