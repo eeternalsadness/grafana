@@ -13,10 +13,11 @@ terraform_base_resource = "grafana_data_source.data-source"
 org_id = get_org_id()
 
 
-def import_data_sources(
-    config_path, env, generate_config_files=True, import_to_terraform=True
-):
+def import_data_sources(config_path, generate_config_files=True, import_resources=True):
     print("Importing Grafana data sources")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     # create config folder if not exist
     create_dir(f"{config_path}/{base_path}")
@@ -33,14 +34,12 @@ def import_data_sources(
             write_to_config_files(config_path, data_source, data_source_dict)
 
         # import to terraform
-        if import_to_terraform:
-            tf_data_source_resource = f'{terraform_base_resource}["{data_source}"]'
-            # only import data sources that are not read-only
-            if (
-                not data_source_dict[data_source]["read_only"]
-                and tf_data_source_resource not in tf_state
-            ):
-                import_tf_resource(tf_data_source_resource, f"{org_id}:{uid}", env)
+        if import_resources:
+            tf_data_source_resource = f'{
+                terraform_base_resource}["{data_source}"]'
+            if tf_data_source_resource not in tf_state:
+                import_tf_resource(tf_data_source_resource,
+                                   f"{org_id}:{uid}", env)
 
 
 def get_data_sources():
@@ -60,8 +59,7 @@ def get_data_sources():
             "is_default": data_source["isDefault"],
             "url": data_source["url"],
             "uid": data_source["uid"],
-            "read_only": data_source["readOnly"],
-            "has_secrets": False,
+            "has_secure_data": False,
         }
 
         if "httpHeaders" in data_source and data_source["httpHeaders"]:
@@ -73,7 +71,10 @@ def get_data_sources():
         if "jsonData" in data_source and data_source["jsonData"]:
             data_source_dict[name]["json_data"] = data_source["jsonData"]
         if "secureJsonFields" in data_source and data_source["secureJsonFields"]:
-            data_source_dict[name]["has_secrets"] = True
+            print(data_source["secureJsonFields"])
+            data_source_dict[name]["has_secure_data"] = True
+        # if "secureJsonFields" in data_source and data_source["secureJsonFields"]:
+        #    data_source_dict[name]["secureJsonFields"] = data_source["secureJsonFields"]
         if "user" in data_source and data_source["user"]:
             data_source_dict[name]["username"] = data_source["user"]
 

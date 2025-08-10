@@ -14,10 +14,11 @@ terraform_base_resource = "module.alerts.grafana_rule_group.rule-group"
 org_id = get_org_id()
 
 
-def import_rule_groups(
-    config_path, env, generate_config_files=True, import_to_terraform=True
-):
+def import_rule_groups(config_path, generate_config_files=True, import_resources=True):
     print("Importing Grafana rule groups")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     rule_groups = get_rule_groups()
     tf_state = get_tf_state()
@@ -25,7 +26,8 @@ def import_rule_groups(
         folder_uid = rule_groups[rule_group]["folder_uid"]
         rule_group_name = rule_groups[rule_group]["name"]
         data = get_grafana_data(
-            f"/api/v1/provisioning/folder/{folder_uid}/rule-groups/{rule_group_name}/export?format=json"
+            f"/api/v1/provisioning/folder/{folder_uid}/rule-groups/{
+                rule_group_name}/export?format=json"
         )
 
         title = to_kebab_case(rule_group_name)
@@ -35,7 +37,7 @@ def import_rule_groups(
             write_to_config_files(config_path, folder_name, title, data)
 
         # import to terraform
-        if import_to_terraform:
+        if import_resources:
             tf_rule_group_resource = (
                 f'{terraform_base_resource}["{folder_name}/{title}"]'
             )
@@ -71,4 +73,5 @@ def write_to_config_files(config_path, folder_name, title, data):
     file_path = f"{config_path}/{base_path}/{folder_name}/{title}.yaml"
     print(f"Writing to '{file_path}'")
     with open(file_path, "w") as file:
-        yaml.dump(data, file, sort_keys=False, width=float("inf"), allow_unicode=True)
+        yaml.dump(data, file, sort_keys=False,
+                  width=float("inf"), allow_unicode=True)

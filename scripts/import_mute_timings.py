@@ -12,10 +12,11 @@ terraform_base_resource = "module.alerts.grafana_mute_timing.mute-timing"
 org_id = get_org_id()
 
 
-def import_mute_timings(
-    config_path, env, generate_config_files=True, import_to_terraform=True
-):
+def import_mute_timings(config_path, generate_config_files=True, import_resources=True):
     print("Importing Grafana mute timings")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     # create config folder if not exist
     create_dir(f"{config_path}/{base_path}")
@@ -27,14 +28,16 @@ def import_mute_timings(
         name = mute_timings_dict[mute_timing]["name"]
 
         if generate_config_files:
-            write_to_config_files(config_path, name, mute_timings_dict[mute_timing])
+            write_to_config_files(
+                config_path, name, mute_timings_dict[mute_timing])
 
         # import to terraform
-        if import_to_terraform:
+        if import_resources:
             tf_state = get_tf_state()
             tf_mute_timings_resource = f'{terraform_base_resource}["{name}"]'
             if tf_mute_timings_resource not in tf_state:
-                import_tf_resource(tf_mute_timings_resource, f"{org_id}:{name}", env)
+                import_tf_resource(tf_mute_timings_resource,
+                                   f"{org_id}:{name}", env)
 
 
 def get_mute_timings():

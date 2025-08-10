@@ -1,4 +1,3 @@
-import json
 import yaml
 from common import (
     get_grafana_data,

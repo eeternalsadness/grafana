@@ -15,17 +15,21 @@ org_id = get_org_id()
 
 
 def import_notification_policy(
-    config_path, env, generate_config_files=True, import_to_terraform=True
+    config_path, generate_config_files=True, import_resources=True
 ):
     print("Importing Grafana notification policy")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     if generate_config_files:
         write_to_config_files(config_path)
 
     # import to terraform
-    if import_to_terraform:
+    if import_resources:
         tf_state = get_tf_state()
-        tf_notification_policy_resource = f'{terraform_base_resource}["default"]'
+        tf_notification_policy_resource = f'{
+            terraform_base_resource}["default"]'
         if tf_notification_policy_resource not in tf_state:
             import_tf_resource(
                 tf_notification_policy_resource, f"{org_id}:default", env
@@ -34,7 +38,8 @@ def import_notification_policy(
 
 def get_notification_policy():
     notification_policy_dict = {}
-    data = get_grafana_data("/api/v1/provisioning/policies/export")["policies"][0]
+    data = get_grafana_data(
+        "/api/v1/provisioning/policies/export")["policies"][0]
     notification_policy_dict["default"] = {
         "contact_point": data["receiver"],
         "group_by": data["group_by"],
@@ -86,4 +91,5 @@ def write_to_config_files(config_path):
     file_path = f"{config_path}/{base_path}/default.yaml"
     with open(file_path, "w") as file:
         print(f"Writing to '{file_path}'")
-        yaml.dump(notification_policy_dict, file, sort_keys=False, width=float("inf"))
+        yaml.dump(notification_policy_dict, file,
+                  sort_keys=False, width=float("inf"))

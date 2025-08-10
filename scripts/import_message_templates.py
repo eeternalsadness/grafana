@@ -13,9 +13,12 @@ org_id = get_org_id()
 
 
 def import_message_templates(
-    config_path, env, generate_config_files=True, import_to_terraform=True
+    config_path, generate_config_files=True, import_resources=True
 ):
     print("Importing Grafana message templates")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     # create config folder if not exist
     create_dir(f"{config_path}/{base_path}")
@@ -27,7 +30,7 @@ def import_message_templates(
         write_to_config_files(config_path, message_template_dict)
 
     # import to terraform
-    if import_to_terraform:
+    if import_resources:
         tf_state = get_tf_state()
         for message_template in message_template_dict:
             tf_message_template_resource = (
@@ -35,9 +38,8 @@ def import_message_templates(
             )
             if tf_message_template_resource not in tf_state:
                 import_tf_resource(
-                    tf_message_template_resource,
-                    f"{org_id}:{message_template}",
-                    env,
+                    tf_message_template_resource, f"{
+                        org_id}:{message_template}", env
                 )
 
 

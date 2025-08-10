@@ -17,10 +17,11 @@ terraform_base_dashboard_perm_resource = (
 org_id = get_org_id()
 
 
-def import_dashboards(
-    config_path, env, generate_config_files=True, import_to_terraform=True
-):
+def import_dashboards(config_path, generate_config_files=True, import_resources=True):
     print("Importing Grafana dashboards")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     # create config folder if not exist
     # create_dir(f"{config_path}/{base_path}")
@@ -35,20 +36,22 @@ def import_dashboards(
         if generate_config_files:
             write_to_config_files(config_path, dashboard, dashboard_dict)
 
-        if import_to_terraform:
+        if import_resources:
             # import dashboards to terraform
             tf_dashboard_resource = (
                 f'{terraform_base_dashboard_resource}["{dashboard}"]'
             )
             if tf_dashboard_resource not in tf_state:
-                import_tf_resource(tf_dashboard_resource, f"{org_id}:{uid}", env)
+                import_tf_resource(tf_dashboard_resource,
+                                   f"{org_id}:{uid}", env)
 
             # import dashboard permissions to terraform
             tf_dashboard_perm_resource = (
                 f'{terraform_base_dashboard_perm_resource}["{dashboard}"]'
             )
             if tf_dashboard_perm_resource not in tf_state:
-                import_tf_resource(tf_dashboard_perm_resource, f"{org_id}:{uid}", env)
+                import_tf_resource(tf_dashboard_perm_resource, f"{
+                                   org_id}:{uid}", env)
 
 
 def get_dashboards():
@@ -94,7 +97,8 @@ def write_to_config_files(config_path, dashboard_name, dashboard_dict):
 
     # write metadata to yaml file
     dashboard_title = dashboard_dict[dashboard_name]["meta"]["title"]
-    yaml_file_path = f"{config_path}/{base_path}/{folder_name}/{dashboard_title}.yaml"
+    yaml_file_path = f"{
+        config_path}/{base_path}/{folder_name}/{dashboard_title}.yaml"
     with open(yaml_file_path, "w") as file:
         print(f"Writing to '{yaml_file_path}'")
         yaml.dump(

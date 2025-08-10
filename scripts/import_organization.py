@@ -10,10 +10,11 @@ base_path = "organization"
 terraform_base_resource = "grafana_organization.organization"
 
 
-def import_organization(
-    config_path, env, generate_config_files=True, import_to_terraform=True
-):
+def import_organization(config_path, generate_config_files=True, import_resources=True):
     print("Importing Grafana organization")
+
+    # Extract env from config_path (format: envs/{env})
+    env = config_path.split("/")[1]
 
     # create config folder if not exist
     create_dir(f"{config_path}/{base_path}")
@@ -22,7 +23,6 @@ def import_organization(
     organization_dict = get_organization()
 
     # delete id from output
-    # name = list(organization_dict.keys())[0]
     id = organization_dict["id"]
     del organization_dict["id"]
 
@@ -30,7 +30,7 @@ def import_organization(
         write_to_config_files(config_path, organization_dict)
 
     # import to terraform
-    if import_to_terraform:
+    if import_resources:
         tf_state = get_tf_state()
         tf_organization_resource = f"{terraform_base_resource}"
         if tf_organization_resource not in tf_state:
