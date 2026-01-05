@@ -1,6 +1,0 @@
-node-exporter-aix:
-  permissions:
-  - permission: Edit
-    role: Editor
-  - permission: View
-    role: Viewer

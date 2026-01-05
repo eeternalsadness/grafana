@@ -1,5 +1,5 @@
 default:
-  contact_point: discord-homelab
+  contact_point: homelab
   group_by:
     - grafana_folder
     - alertname

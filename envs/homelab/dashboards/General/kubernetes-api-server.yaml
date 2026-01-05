@@ -1,6 +1,0 @@
-kubernetes-api-server:
-  permissions:
-  - permission: View
-    role: Viewer
-  - permission: Edit
-    role: Editor
