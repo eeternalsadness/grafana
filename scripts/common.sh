@@ -97,6 +97,18 @@ function consul_get_token() {
   export CONSUL_HTTP_TOKEN="$consul_token"
 }
 
+function get_pg_creds() {
+  local pg_role=$1
+  local vault_pg_creds
+  vault_pg_creds=$(vault read "database/static-creds/${pg_role}" -format=json)
+
+  pg_user=$(jq -r '.data.username' <<<"$vault_pg_creds")
+  pg_password=$(jq -r '.data.password' <<<"$vault_pg_creds")
+
+  export PGUSER="$pg_user"
+  export PGPASSWORD="$pg_password"
+}
+
 function grafana_auth() {
   local vault_secret_path="$1"
   export GRAFANA_AUTH="$(vault kv get -mount=kvv2 -field=username ${vault_secret_path}):$(vault kv get -mount=kvv2 -field=password ${vault_secret_path})"
@@ -120,8 +132,8 @@ case "$env" in
   #export CONSUL_HTTP_ADDR=""
   ;;
 "homelab")
-  export VAULT_ADDR="https://vault.homelab.io"
-  export GRAFANA_URL="https://grafana.homelab.io"
+  export VAULT_ADDR="https://vault.homelab.eeternalsadness.dev"
+  export GRAFANA_URL="https://grafana.homelab.eeternalsadness.dev"
   #export CONSUL_HTTP_ADDR=""
   ;;
 *)
