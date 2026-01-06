@@ -5,10 +5,10 @@ variable "contact-points-config-dir" {
 }
 
 # message templates
-variable "message-templates-config-dir" {
-  description = "The relative path of the directory that stores the yaml files for message template configuration"
-  type        = string
-}
+#variable "message-templates-config-dir" {
+#  description = "The relative path of the directory that stores the yaml files for message template configuration"
+#  type        = string
+#}
 
 # notification policy
 variable "notification-policy-config-dir" {

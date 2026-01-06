@@ -116,9 +116,9 @@ resource "grafana_contact_point" "contact-point" {
       # optional
       avatar_url              = try(each.value.spec["discord"].avatar_url, null)
       disable_resolve_message = try(each.value.spec["discord"].disable_resolve_message, null)
-      message                 = file("${path.module}/../../templates/discord.txt")
+      message                 = file("${path.module}/../../templates/discord-message.tpl")
       settings                = try(each.value.spec["discord"].settings, null)
-      title                   = file("${path.module}/../../templates/discord-title.txt")
+      title                   = file("${path.module}/../../templates/discord-title.tpl")
       use_discord_username    = try(each.value.spec["discord"].use_discord_username, null)
     }
   }

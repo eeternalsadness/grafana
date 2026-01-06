@@ -10,10 +10,10 @@ module "alerts" {
   vault-path-kv-contact-point-discord    = var.vault-path-kv-contact-point-discord
 
   # NOTE: map folder names to uids
-  folder-uids                    = { for k, v in grafana_folder.folder : v.title => v.uid }
-  rule-groups-config-dir         = "${var.repo-path-alerts}/rule-groups"
-  contact-points-config-dir      = "${var.repo-path-alerts}/contact-points"
-  message-templates-config-dir   = "${var.repo-path-alerts}/message-templates"
+  folder-uids               = { for k, v in grafana_folder.folder : v.title => v.uid }
+  rule-groups-config-dir    = "${var.repo-path-alerts}/rule-groups"
+  contact-points-config-dir = "${var.repo-path-alerts}/contact-points"
+  #message-templates-config-dir   = "${var.repo-path-alerts}/message-templates"
   notification-policy-config-dir = "${var.repo-path-alerts}/notification-policy"
   mute-timings-config-dir        = "${var.repo-path-alerts}/mute-timings"
 }
