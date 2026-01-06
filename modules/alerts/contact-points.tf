@@ -97,9 +97,9 @@ resource "grafana_contact_point" "contact-point" {
       disable_notifications    = try(each.value.spec["telegram"].disable_notifications, null)
       disable_resolve_message  = try(each.value.spec["telegram"].disable_resolve_message, null)
       disable_web_page_preview = try(each.value.spec["telegram"].disable_web_page_preview, null)
-      message                  = try(each.value.spec["telegram"].message, null)
+      message                  = file("${path.module}/../../templates/telegram.tpl")
       message_thread_id        = try(each.value.spec["telegram"].message_thread_id, null)
-      parse_mode               = try(each.value.spec["telegram"].parse_mode, null)
+      parse_mode               = "HTML"
       protect_content          = try(each.value.spec["telegram"].protect_content, null)
       settings                 = try(each.value.spec["telegram"].settings, null)
     }

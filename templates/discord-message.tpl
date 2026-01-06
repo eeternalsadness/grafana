@@ -8,4 +8,8 @@
 :yellow_circle: **{{ .Annotations.summary }}**
 {{- end }}
 {{ .Annotations.description }}
+
+{{ if gt (len .SilenceURL) 0 }}[Silence]({{ .SilenceURL }})  |  {{ end }}
+{{- if gt (len .DashboardURL) 0 }}[Dashboard]({{ .DashboardURL }})  |  {{ end }}
+{{- if gt (len .PanelURL) 0 }}[Panel]({{ .PanelURL }}) {{- end -}}
 {{- end }}
