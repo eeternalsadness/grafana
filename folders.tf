@@ -2,7 +2,7 @@ locals {
   folders = merge(
     [
       for file_path in fileset("${path.module}/${var.repo-path-folders}", "*.yaml") :
-      try(yamldecode(file("${path.module}/${file_path}")), {})
+      try(yamldecode(file("${path.module}/${var.repo-path-folders}/${file_path}")), {})
     ]...
   )
 }
