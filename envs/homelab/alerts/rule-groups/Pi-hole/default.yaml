@@ -1,0 +1,61 @@
+apiVersion: 1
+groups:
+- orgId: 1
+  name: default
+  folder: Pi-hole
+  interval: 1m
+  rules:
+  - uid: afb7xksl4purkf
+    title: Pi-hole service down
+    condition: C
+    data:
+    - refId: A
+      relativeTimeRange:
+        from: 600
+        to: 0
+      datasourceUid: prometheus
+      model:
+        editorMode: code
+        expr: node_systemd_unit_state{job="node-exporter", instance="rpi-1.home.lan:9100", name="pihole-FTL.service", state="active"}
+        instant: true
+        intervalMs: 1000
+        legendFormat: __auto
+        maxDataPoints: 43200
+        range: false
+        refId: A
+    - refId: C
+      relativeTimeRange:
+        from: 0
+        to: 0
+      datasourceUid: __expr__
+      model:
+        conditions:
+        - evaluator:
+            params:
+            - 1
+            type: lt
+          operator:
+            type: and
+          query:
+            params:
+            - C
+          reducer:
+            params: []
+            type: last
+          type: query
+        datasource:
+          type: __expr__
+          uid: __expr__
+        expression: A
+        intervalMs: 1000
+        maxDataPoints: 43200
+        refId: C
+        type: threshold
+    noDataState: NoData
+    execErrState: Error
+    for: 5m
+    annotations:
+      summary: Pi-hole service down
+    labels:
+      severity: critical
+    isPaused: false
